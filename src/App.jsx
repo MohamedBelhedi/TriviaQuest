@@ -3,43 +3,94 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export default function App() {
-  const [text1,setText1] = useState("hallo")
-  const options={
-    methode:"GET",
-    url:"https://opentdb.com/api.php?amount=10&category=22"
+  const [text1, setText1] = useState("hallo")
+  const [answer, setAnswer] = useState("")
+  const [vis, setVis] = useState(false)
+  const[inputAnswer,setInputAnswer]=useState("")
+  const randInt = Math.floor(Math.random() * 100)
+  const options = {
+    methode: "GET",
+    url: `https://opentdb.com/api.php?amount=${randInt}`
   }
 
-  const fetchDataQuest=()=>{
+  const fetchDataQuest = () => {
 
     axios.request(options).then(
 
-     
 
-   
-      res=>{
+
+
+      res => {
         //guest about UseState after 3 tries show the correct anwer and stop the game and make with useState counter from 60 sec
-           const randomint=Math.floor(Math.random() * 10)
+        const randomint = Math.floor(Math.random() * 10)
         console.log(res.data.results)
-        
-        console.log(res.data.results[randomint])
-                         
-      }
-                               )
 
-    
+        console.log(res.data.results[randomint])
+        setText1(res.data.results[randomint])
+        setAnswer(res.data.results[randomint].correct_answer)
+
+
+      }
+    )
+
+
+  }
+
+
+  const answerVis = () => {
+
+    setVis(true)
+    vis ? setVis(false) : setVis(true)
+    setTimeout(() => {
+      location.reload()
+    }, 2000)
+
+  }
+  const correctAnswer = () => {
+
+    // { text1 ===}
+
+
+  }
+    const correctAnswers=(e)=>{
+      
+if(e.key==="Enter"){
+    {inputAnswer===answer?alert("Richtig"):alert("falsch")}
+}
     
   }
 
-  useEffect(()=>{
+  useEffect(() => {
 
     fetchDataQuest()
+// correctAnswers()
 
-    
-  },[])
+  }, [])
+
+
+
+
   return (
-    <main>
-      <h1>{text1}</h1>
+    <div>
+      <h1>{text1.category}</h1>
+      <h1>{text1.question}</h1>
+      <h2>possible answers: {text1.correct_answer},{text1.incorrect_answers + " "}</h2>
+
+      {vis ? <h2>{answer}</h2> : null}
       
-    </main>
+<h3>your answer:{inputAnswer}</h3>
+      <input onChange={(e) => {
+      setInputAnswer(e.target.value)
+        // { e.target.value.includes(answer) ? alert("richtig") : alert("falsch") }
+
+        console.log(e.target.value)
+      }}
+        onKeyDown={correctAnswers}
+        value={inputAnswer} />
+
+      <button onClick={answerVis}>Answers</button>
+
+
+    </div>
   )
 }
