@@ -1,4 +1,6 @@
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Spinner from 'react-bootstrap/Spinner';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
@@ -68,25 +70,28 @@ export default function App() {
 
 
   return (
-    <div>
-      <h1>{!text1.category ? "pls Wait loading" : text1.category}</h1>
-      <h1>{text1.question}</h1>
-      <h2>possible answers: {text1.correct_answer === undefined ? "Loading" : text1.correct_answer},{text1.incorrect_answers === undefined ? "loading" : text1.incorrect_answers + " "}</h2>
+    <div className="container">
+      <div className="row justify-items-center center">
+        <h1>{!text1.category ? "pls Wait loading" : text1.category}</h1>
+        <h1>{text1.question}</h1>
+        <h2>possible answers: {text1.correct_answer === undefined ?     <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner> : text1.correct_answer} {text1.incorrect_answers === undefined ? "" : text1.incorrect_answers + " "}</h2>
 
-      {vis ? <h2>{answer}</h2> : null}
+        {vis ? <h2>{answer}</h2> : null}
 
-      <h3>your answer:{inputAnswer}</h3>
-      <input onChange={(e) => {
-        setInputAnswer(e.target.value)
-        // { e.target.value.includes(answer) ? alert("richtig") : alert("falsch") }
+        <h3>your answer:{inputAnswer}</h3>
+        <input onChange={(e) => {
+          setInputAnswer(e.target.value)
+          // { e.target.value.includes(answer) ? alert("richtig") : alert("falsch") }
 
-        console.log(e.target.value)
-      }}
-        onKeyDown={correctAnswers}
-        value={inputAnswer} />
+          console.log(e.target.value)
+        }}
+          onKeyDown={correctAnswers}
+          value={inputAnswer} />
 
-      <button onClick={answerVis}>Answers</button>
-
+        <button className="btn btn-primary" onClick={answerVis}>Answers</button>
+      </div>
 
     </div>
   )
