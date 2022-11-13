@@ -6,16 +6,17 @@ export default function App() {
   const [text1, setText1] = useState("hallo")
   const [answer, setAnswer] = useState("")
   const [vis, setVis] = useState(false)
-  const[inputAnswer,setInputAnswer]=useState("")
+  const [inputAnswer, setInputAnswer] = useState("")
   const randInt = Math.floor(Math.random() * 100)
   const options = {
     methode: "GET",
     url: `https://opentdb.com/api.php?amount=${randInt}`
   }
 
-  const fetchDataQuest = () => {
+  const fetchDataQuest = async () => {
+    setText1("Loading....")
 
-    axios.request(options).then(
+    await axios.request(options).then(
 
 
 
@@ -39,31 +40,27 @@ export default function App() {
 
   const answerVis = () => {
 
-    setVis(true)
+
     vis ? setVis(false) : setVis(true)
     setTimeout(() => {
       location.reload()
     }, 2000)
 
   }
-  const correctAnswer = () => {
 
-    // { text1 ===}
+  const correctAnswers = (e) => {
 
+    if (e.key === "Enter") {
+      { inputAnswer === answer ? alert("right") | setTimeout(() => { location.reload() }, 3000) : alert("wrong try again") }
+    }
 
-  }
-    const correctAnswers=(e)=>{
-      
-if(e.key==="Enter"){
-    {inputAnswer===answer?alert("Richtig"):alert("falsch")}
-}
-    
   }
 
   useEffect(() => {
 
     fetchDataQuest()
-// correctAnswers()
+
+    // correctAnswers()
 
   }, [])
 
@@ -72,15 +69,15 @@ if(e.key==="Enter"){
 
   return (
     <div>
-      <h1>{text1.category}</h1>
+      <h1>{!text1.category ? "pls Wait loading" : text1.category}</h1>
       <h1>{text1.question}</h1>
-      <h2>possible answers: {text1.correct_answer},{text1.incorrect_answers + " "}</h2>
+      <h2>possible answers: {text1.correct_answer === undefined ? "Loading" : text1.correct_answer},{text1.incorrect_answers === undefined ? "loading" : text1.incorrect_answers + " "}</h2>
 
       {vis ? <h2>{answer}</h2> : null}
-      
-<h3>your answer:{inputAnswer}</h3>
+
+      <h3>your answer:{inputAnswer}</h3>
       <input onChange={(e) => {
-      setInputAnswer(e.target.value)
+        setInputAnswer(e.target.value)
         // { e.target.value.includes(answer) ? alert("richtig") : alert("falsch") }
 
         console.log(e.target.value)
