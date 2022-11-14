@@ -9,6 +9,7 @@ export default function App() {
   const [answer, setAnswer] = useState("")
   const [vis, setVis] = useState(false)
   const [inputAnswer, setInputAnswer] = useState("")
+const[tries,setTries]= useState("3")
   const randInt = Math.floor(Math.random() * 100)
   const options = {
     methode: "GET",
@@ -28,7 +29,7 @@ export default function App() {
         const randomint = Math.floor(Math.random() * 10)
         console.log(res.data.results)
 
-        console.log(res.data.results[randomint])
+        //console.log(res.data.results[randomint])
         setText1(res.data.results[randomint])
         setAnswer(res.data.results[randomint].correct_answer)
 
@@ -53,7 +54,10 @@ export default function App() {
   const correctAnswers = (e) => {
 
     if (e.key === "Enter") {
-      { inputAnswer === answer ? alert("right") | setTimeout(() => { location.reload() }, 3000) : alert("wrong try again") }
+      { inputAnswer === answer ? alert("right") | setTimeout(() => { location.reload() }, 3000) : alert("wrong try again");setTries(tries-1) }
+  {tries<2?setVis(true)| setTimeout(()=>{
+    location.reload();
+  }, 3000):tries}    
     }
 
   }
@@ -62,7 +66,6 @@ export default function App() {
 
     fetchDataQuest()
 
-    // correctAnswers()
 
   }, [])
 
@@ -71,12 +74,13 @@ export default function App() {
 
   return (
     <div className="container">
-      <div className="row justify-items-center center">
+      <div className="row justify-items-center center col-sm-6">
         <h1>{!text1.category ? "pls Wait loading" : text1.category}</h1>
+        <div>Tries:{tries}</div>
         <h1>{text1.question}</h1>
-        <h2>possible answers: {text1.correct_answer === undefined ?     <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner> : text1.correct_answer} {text1.incorrect_answers === undefined ? "" : text1.incorrect_answers + " "}</h2>
+        <h2>possible answers: {text1.correct_answer === undefined ? <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner> : text1.correct_answer} {text1.incorrect_answers === undefined ? "" : text1.incorrect_answers + " "}</h2>
 
         {vis ? <h2>{answer}</h2> : null}
 
